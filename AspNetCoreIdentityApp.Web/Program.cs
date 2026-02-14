@@ -11,6 +11,18 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
 
 
+builder.Services.ConfigureApplicationCookie(opt =>
+{
+    var cookieBuilder = new CookieBuilder();
+
+    cookieBuilder.Name = "UdemyAppCookie";
+    opt.LoginPath = new PathString("/Home/Signin");
+    opt.Cookie = cookieBuilder;
+    opt.ExpireTimeSpan = TimeSpan.FromDays(60);
+    opt.SlidingExpiration = true;
+});
+
+
 builder.Services.AddIdentityWithExt();
 
 var app = builder.Build();

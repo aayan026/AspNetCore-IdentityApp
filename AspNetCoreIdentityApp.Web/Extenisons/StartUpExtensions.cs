@@ -1,5 +1,7 @@
 ﻿using AspNetCoreIdentityApp.Web.CustomValidations;
+using AspNetCoreIdentityApp.Web.Localizations;
 using AspNetCoreIdentityApp.Web.Models;
+using AspNetCoreIdentityApp.Web.Validations;
 
 namespace AspNetCoreIdentityApp.Web.Extenisons
 {
@@ -18,7 +20,14 @@ namespace AspNetCoreIdentityApp.Web.Extenisons
                 options.Password.RequireLowercase = true;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireDigit = false;
-            }).AddPasswordValidator<PasswordValidator>().AddEntityFrameworkStores<AppDbContext>();
+
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(3);
+                options.Lockout.MaxFailedAccessAttempts = 3;
+
+            }).AddPasswordValidator<PasswordValidator>()
+                .AddUserValidator<UserValidator>()
+                .AddErrorDescriber<LocalizationIdentityErrorDescriber>()
+                .AddEntityFrameworkStores<AppDbContext>();
 
         }
     }
